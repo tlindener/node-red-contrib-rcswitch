@@ -1,0 +1,17 @@
+{
+    "name"         : "node-red-contrib-rcswitch",
+    "author"	   : "tlindener",
+    "version"      : "0.0.2",
+    "description"  : "A rcswitch node for node-red",
+  "dependencies": {
+    "rcswitch": "*"
+   
+  },
+    "keywords": [ "node-red","rcswitch" ],
+    "node-red"     : {
+        "nodes": {
+            "rcswitch": "rcswitch/rcswitch.js"
+        }
+    }
+
+}
