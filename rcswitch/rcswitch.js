@@ -55,7 +55,6 @@ function RCSwitchtsNode(n) {
 			  node.log ("send code " + node.systemcode + " auf PIN " + node.pin);
 			  rcswitch.enableTransmit(node.pin); 
 			  rcswitch.sendTriState(node.systemcode);
-			  node.log ("send code " + node.systemcode + " auf PIN " + node.pin + " success");
 			  rcswitch.disableTransmit();
 			  }
 			  
@@ -64,7 +63,6 @@ function RCSwitchtsNode(n) {
 			  node.log ("send code " + msg.payload + " auf PIN " + node.pin);
 			  rcswitch.enableTransmit(node.pin); 
 			  rcswitch.sendTriState(msg.payload);
-			  node.log ("send code " + node.systemcode + " auf PIN " + node.pin + " success");
 			  rcswitch.disableTransmit();
 			  }
 		}
