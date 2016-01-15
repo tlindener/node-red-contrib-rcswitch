@@ -4,7 +4,7 @@
     "version"      : "0.0.2",
     "description"  : "A rcswitch node for node-red",
   "dependencies": {
-    "rcswitch": "*"
+    "rcswitch": ">=0.3.0"
    
   },
     "keywords": [ "node-red","rcswitch" ],
