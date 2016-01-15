@@ -32,6 +32,49 @@ function RCSwitchNode(config){
 });
 }
     RED.nodes.registerType("rcswitch",RCSwitchNode);
+
+	
+function RCSwitchtsNode(n) {
+    var node = this;
+    RED.nodes.createNode(node,n);
+		
+	
+	node.systemcode=n.systemcode;
+	node.pin=parseInt (n.pin);
+	//node.log ("systemcode " + n.systemcode);
+	
+	
+	this.on('input', function(msg) {
+	var rcswitch = require('../node_modules/rcswitch');
+        //node.log ("systemcode " + node.systemcode);
+		//node.log ("Starte test");
+		try{
+
+			if (node.systemcode.length>5)
+			  {
+			  node.log ("send code " + node.systemcode + " auf PIN " + node.pin);
+			  rcswitch.enableTransmit(node.pin); 
+			  rcswitch.sendTriState(node.systemcode);
+			  node.log ("send code " + node.systemcode + " auf PIN " + node.pin + " success");
+			  rcswitch.disableTransmit();
+			  }
+			  
+			 else if(msg.payload.length>5)
+			  {
+			  node.log ("send code " + msg.payload + " auf PIN " + node.pin);
+			  rcswitch.enableTransmit(node.pin); 
+			  rcswitch.sendTriState(msg.payload);
+			  node.log ("send code " + node.systemcode + " auf PIN " + node.pin + " success");
+			  rcswitch.disableTransmit();
+			  }
+		}
+		catch(err){
+			node.error(err);
+		}
+	
+});
+}
+    RED.nodes.registerType("rcswitchts",RCSwitchtsNode);
 }
 
 
