@@ -45,7 +45,7 @@ function RCSwitchtsNode(n) {
 	
 	
 	this.on('input', function(msg) {
-	var rcswitch = require('../node_modules/rcswitch');
+	var rcswitch = require('rcswitch');
         //node.log ("systemcode " + node.systemcode);
 		//node.log ("Starte test");
 		try{
