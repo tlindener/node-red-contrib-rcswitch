@@ -4,14 +4,14 @@
         color: '#a6bbcf',
         defaults: {
         name: {value:""},
-		func: {value:0},
-		pin: {value:0},
-		device:{value:""},
-		group:{value:""},
-		channel:{value:""},
-		family:{value:""},
-		switchvalue: {value:0},
- 	    systemcode:{value:""}
+		func: {value:0, required:true},
+		pin: {value:0, required:true,validate:RED.validators.number()},
+		device:{value:"",required:false},
+		group:{value:"",required:false},
+		channel:{value:"",required:false},
+		family:{value:"",required:false},
+		switchvalue: {value:0,required:false},
+ 	    systemcode:{value:"",required:false}
         },
         inputs:1,
         outputs:0,
@@ -128,8 +128,8 @@
 	<ul>
 	  <li><b>Group code + Device</b><br>For devices without family code. The group code is either an binary string with length 5 or a numeric value (1-4) and could be set in field <b>Group</b> or <b>msg.group</b>. The switch/device could be set in field <b>Device</b> or <b>msg.device</b> (value [ABCD] (in this case Field Device must be set to "msg.device").  The Switchposition could be set in field <b>Switch Position</b> or in <b>msg.payload</b>. In this case the value 0 means off and the value 1 means on.</li>
 	  <li><b>Family + Group code + Device</b><br>For devices with family code. The Family code must be one of the chars [abcdef] and could be set in field <b>Family</b> or <b>msg.family</b>. The group code is numeric and must be one of the values [1234] and could be set in field <b>Group</b> or <b>msg.group</b>. The switch/device could be set in field <b>Device</b> or <b>msg.device</b> (value [ABCD] (in this case Field Device must be set to "msg.device"). The Switchposition could be set in field <b>Switch Position</b> or in <b>msg.payload</b>. In this case the value 0 means off and the value 1 means on.</li>
-	  <li><b>Channel + Device (Tristate)</b><br>For devices with tristate code like micro-electric AS 73 witch is also sold as REV Telecontrol in Germany (Version with house code with 6 DIP switches). The Channel code must be a binary string with 0=off and 1=on and could be set in field <b>Channel</b> or <b>msg.channel</b>. The switch/channel could be set in field <b>Channel</b> or <b>msg.channel</b> (value [ABCD] (in this case Field Channel must be empty). The switch/device could be set in field <b>Device</b> or <b>msg.device</b> (value [ABCD] (in this case Field Device must be set to "msg.device"). The Switchposition could be set in field <b>Switch Position</b> or in <b>msg.payload</b>. In this case the value 0 means off and the value 1 means on.</li>
-	  <li><b>Channel + Device (Tristate)</b><br>Send a tristate string. The String could be set in field <b>systemcode</b> or <b>msg.payload</b>. Only the chars 0,1,F and S without any blanks are alowed.</li>
+	  <li><b>Channel + Device (Tristate)</b><br>For devices with tristate code like micro-electric AS 73 witch is also sold as REV Telecontrol in Germany (Version with house code with 6 DIP switches). The Channel code must be a binary string with 0=off and 1=on and could be set in field <b>Channel</b> or <b>msg.channel</b> (in this case Field Channel must be empty). The switch/device could be set in field <b>Device</b> or <b>msg.device</b> (value [ABCD] (in this case Field Device must be set to "msg.device"). The Switchposition could be set in field <b>Switch Position</b> or in <b>msg.payload</b>. In this case the value 0 means off and the value 1 means on.</li>
+	  <li><b>Tristate String</b><br>Send a tristate string. The String could be set in field <b>systemcode</b> or <b>msg.payload</b>. Only the chars 0,1,F and S without any blanks are alowed.</li>
 	  <li><b>Binary String</b><br>Send a binary string. The String could be set in field <b>systemcode</b> or <b>msg.payload</b>. Only the chars 0 and 1 without any blanks are alowed.</li>
 	</ul>
 	<p>An description of the types is on the <a href="https://github.com/marvinroger/node-rcswitch" target="_blank">node-rcswitch Git page</a>.</p>
