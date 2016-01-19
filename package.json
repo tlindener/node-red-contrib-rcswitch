@@ -13,7 +13,6 @@
         "nodes": {
             "rcswitch": "rcswitch/rcswitch.js"
         }
-    },
-    {  }
+    }
 
 }
