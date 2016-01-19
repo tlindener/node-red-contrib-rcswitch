@@ -11,7 +11,7 @@
     "keywords": [ "node-red","rcswitch" ],
     "node-red"     : {
         "nodes": {
-            "rcswitch": "rcswitch2/rcswitch2.js"
+            "rcswitch": "rcswitch/rcswitch.js"
         }
     },
     {  }
