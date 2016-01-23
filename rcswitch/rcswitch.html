@@ -3,41 +3,135 @@
         category: 'output',
         color: '#a6bbcf',
         defaults: {
-        	name: {value:""},
-		device:{value:""},
-		group:{value:""},
-		pinmap:{value:""}
+        name: {value:""},
+		func: {value:0, required:true},
+		pin: {value:0, required:true,validate:RED.validators.number()},
+		device:{value:"",required:false},
+		group:{value:"",required:false},
+		channel:{value:"",required:false},
+		family:{value:"",required:false},
+		switchvalue: {value:0,required:false},
+ 	    systemcode:{value:"",required:false}
         },
         inputs:1,
         outputs:0,
         icon: "rcswitch.png",
+		align:"right",
         label: function() {
             return this.name||"RC Switch";
-        }
+        },
+        labelStyle: function() {
+            return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function() {
+            $("#node-input-func").on("change",function() {
+                if ($("#node-input-func").val() === "0") 
+				    {
+                    $("#node-family").hide();
+                    $("#node-group").show();
+                    $("#node-channel").hide();
+                    $("#node-device").show();
+                    $("#node-switchvalue").show();
+                    $("#node-systemcode").hide();
+                    } 
+				  else if ($("#node-input-func").val() === "1") 
+				    {
+                    $("#node-family").show();
+                    $("#node-group").show();
+                    $("#node-channel").hide();
+                    $("#node-device").show();
+                    $("#node-switchvalue").show();
+                    $("#node-systemcode").hide();
+                    }
+  				  else if ($("#node-input-func").val() === "2") 
+				    {
+                    $("#node-family").hide();
+                    $("#node-group").hide();
+                    $("#node-channel").show();
+                    $("#node-device").show();
+                    $("#node-switchvalue").show();
+                    $("#node-systemcode").hide();
+                    }
+  				  else  
+				    {
+                    $("#node-family").hide();
+                    $("#node-group").hide();
+                    $("#node-channel").hide();
+                    $("#node-device").hide();
+                    $("#node-switchvalue").hide();
+                    $("#node-systemcode").show();
+                    }
+            });
+        }		
     });
 </script>
 
-<script type="text/x-red" data-template-name="rcswitch">
+	<script type="text/x-red" data-template-name="rcswitch">
     <div class="form-row">
-        <label for="node-input-name"><i class="icon-tag"></i> Name</label>
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
     </div>
-    <div class="form-row node-input-group">
-         <label for="node-input-group"><i class="fa fa-group"></i> Group</label>
-         <input type="text" id="node-input-group" placeholder="Group">
+   <div class="form-row">
+         <label for="node-input-pin"><i class="fa fa-tag"></i> PIN</label>
+         <input type="text" id="node-input-pin" placeholder="pin">
 </div>
-    <div class="form-row node-input-device">
-         <label for="node-input-device"><i class="fa fa-device"></i> Device</label>
-         <input type="text" id="node-input-device" placeholder="Device">
-</div>
-    <div class="form-row node-input-pinmap">
-         <label for="node-input-pinmap"><i class="fa fa-pinmap"></i> Pinmap</label>
-         <input type="text" id="node-input-pinmap" placeholder="Pinmap">
-</div>
-</script>
+    <div class="form-row">
+        <label for="node-input-func"><i class="fa fa-wrench"></i> Mode</label>
+        <select type="text" id="node-input-func" style="width:74%;">
+            <option value="0">Group code + Device</option>
+            <option value="1">Family + Group code + Device</option>
+            <option value="2">Channel + Device (Tristate)</option>
+            <option value="3">Tristate String</option>
+            <option value="4">Binary String</option>
+        </select>
+    </div>	
+    <div class="form-row" id="node-family">
+         <label for="node-input-family"><i class="fa fa-tag"></i> Family</label>
+         <input type="text" id="node-input-family" placeholder="family">
+    </div>
+    <div class="form-row" id="node-group">
+         <label for="node-input-group"><i class="fa fa-tag"></i> Group</label>
+         <input type="text" id="node-input-group" placeholder="group">
+    </div>
+    <div class="form-row" id="node-channel">
+         <label for="node-input-channel"><i class="fa fa-wrench"></i> Channel</label>
+         <input type="text" id="node-input-channel" placeholder="channel">	 
+    </div>
+    <div class="form-row" id="node-device">
+         <label for="node-input-device"><i class="fa fa-wrench"></i> Device</label>
+        <select type="text" id="node-input-device" style="width:74%;">
+            <option value="">msg.device</option>
+		    <option value="A">Device A</option>
+            <option value="B">Device B</option>
+            <option value="C">Device C</option>
+            <option value="D">Device D</option>
+		</select>
+    </div>
+    <div class="form-row" id="node-switchvalue">
+        <label for="node-input-switchvalue"><i class="fa fa-wrench"></i> Switch Position</label>
+        <select type="text" id="node-input-switchvalue" style="width:74%;">
+            <option value="2">msg.payload</option>
+            <option value="0">off</option>
+            <option value="1">on</option>
+        </select>
+    </div>	
+	<div class="form-row" id="node-systemcode">
+         <label for="node-input-systemcode"><i class="fa fa-tag"></i> Systemcode</label>
+         <input type="text" id="node-input-systemcode" placeholder="systemcode">
+    </div>		 
+
+	</script>
 
 <script type="text/x-red" data-help-name="rcswitch">
-    <p>A node that controls rcswitch devices</p>
+    <p>A node that controls rcswitch devices.</p>
+    <p>This node supports the following modes:</p>
+	<ul>
+	  <li><b>Group code + Device</b><br>For devices without family code. The group code is either an binary string with length 5 or a numeric value (1-4) and could be set in field <b>Group</b> or <b>msg.group</b>. The switch/device could be set in field <b>Device</b> or <b>msg.device</b> (value [ABCD] (in this case Field Device must be set to "msg.device").  The Switchposition could be set in field <b>Switch Position</b> or in <b>msg.payload</b>. In this case the value 0 means off and the value 1 means on.</li>
+	  <li><b>Family + Group code + Device</b><br>For devices with family code. The Family code must be one of the chars [abcdef] and could be set in field <b>Family</b> or <b>msg.family</b>. The group code is numeric and must be one of the values [1234] and could be set in field <b>Group</b> or <b>msg.group</b>. The switch/device could be set in field <b>Device</b> or <b>msg.device</b> (value [ABCD] (in this case Field Device must be set to "msg.device"). The Switchposition could be set in field <b>Switch Position</b> or in <b>msg.payload</b>. In this case the value 0 means off and the value 1 means on.</li>
+	  <li><b>Channel + Device (Tristate)</b><br>For devices with tristate code like micro-electric AS 73 witch is also sold as REV Telecontrol in Germany (Version with house code with 6 DIP switches). The Channel code must be a binary string with 0=off and 1=on and could be set in field <b>Channel</b> or <b>msg.channel</b> (in this case Field Channel must be empty). The switch/device could be set in field <b>Device</b> or <b>msg.device</b> (value [ABCD] (in this case Field Device must be set to "msg.device"). The Switchposition could be set in field <b>Switch Position</b> or in <b>msg.payload</b>. In this case the value 0 means off and the value 1 means on.</li>
+	  <li><b>Tristate String</b><br>Send a tristate string. The String could be set in field <b>systemcode</b> or <b>msg.payload</b>. Only the chars 0,1,F and S without any blanks are alowed.</li>
+	  <li><b>Binary String</b><br>Send a binary string. The String could be set in field <b>systemcode</b> or <b>msg.payload</b>. Only the chars 0 and 1 without any blanks are alowed.</li>
+	</ul>
+	<p>An description of the types is on the <a href="https://github.com/marvinroger/node-rcswitch" target="_blank">node-rcswitch Git page</a>.</p>
+    <p>The pin has to be set according to the WiringPi numeration scheme (see <a href="http://wiringpi.com/pins/" target="_blank"> wiringpi.com/pins/</a> for pin numerotation.</p>
 </script>
-
-
